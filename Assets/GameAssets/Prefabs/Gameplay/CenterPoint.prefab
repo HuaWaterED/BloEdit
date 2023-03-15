@@ -139,9 +139,7 @@ MonoBehaviour:
   lineNoteController: {fileID: 5122208234408603399}
   thisLine:
     onlineNotes: []
-    onlineNotesLength: -1
     offlineNotes: []
-    offlineNotesLength: -1
     speed: []
     far:
       serializedVersion: 2
@@ -248,9 +246,7 @@ MonoBehaviour:
   lineNoteController: {fileID: 323890600802986010}
   thisLine:
     onlineNotes: []
-    onlineNotesLength: -1
     offlineNotes: []
-    offlineNotesLength: -1
     speed: []
     far:
       serializedVersion: 2
@@ -357,9 +353,7 @@ MonoBehaviour:
   lineNoteController: {fileID: 555974982157619623}
   thisLine:
     onlineNotes: []
-    onlineNotesLength: -1
     offlineNotes: []
-    offlineNotesLength: -1
     speed: []
     far:
       serializedVersion: 2
@@ -696,9 +690,7 @@ MonoBehaviour:
   lineNoteController: {fileID: 3474532405289055257}
   thisLine:
     onlineNotes: []
-    onlineNotesLength: -1
     offlineNotes: []
-    offlineNotesLength: -1
     speed: []
     far:
       serializedVersion: 2
@@ -1096,9 +1088,7 @@ MonoBehaviour:
   lineNoteController: {fileID: 2332721750854021627}
   thisLine:
     onlineNotes: []
-    onlineNotesLength: -1
     offlineNotes: []
-    offlineNotesLength: -1
     speed: []
     far:
       serializedVersion: 2
@@ -1295,6 +1285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   squarePosition: {fileID: 450407355890572104}
+  mainCamera: {fileID: 0}
   decideLineControllers:
   - {fileID: 2188726653390802360}
   - {fileID: 8467052956719726910}
@@ -1310,23 +1301,14 @@ MonoBehaviour:
   box:
     boxEvents:
       moveX: []
-      length_moveX: -1
       moveY: []
-      length_moveY: -1
       rotate: []
-      length_rotate: -1
       alpha: []
-      length_alpha: -1
       scaleX: []
-      length_scaleX: -1
       scaleY: []
-      length_scaleY: -1
       centerX: []
-      length_centerX: -1
       centerY: []
-      length_centerY: -1
       lineAlpha: []
-      length_lineAlpha: -1
     lines: []
   sortSeed: 0
   spriteMask: {fileID: 3551648482430810191}
@@ -1340,6 +1322,34 @@ MonoBehaviour:
   currentMoveY: 0
   currentRotate: 0
   boxFineness: 0
+  default_currentScaleX: 2.25
+  default_currentScaleY: 2.25
+  default_currentAlpha: 1
+  default_currentCenterX: 0.5
+  default_currentCenterY: 0.5
+  default_currentLineAlpha: 0
+  default_currentMoveX: 0
+  default_currentMoveY: 0
+  default_currentRotate: 0
+  last_currentScaleX: 0
+  last_currentScaleY: 0
+  last_currentAlpha: 0
+  last_currentCenterX: 0
+  last_currentCenterY: 0
+  last_currentLineAlpha: 0
+  last_currentMoveX: 0
+  last_currentMoveY: 0
+  last_currentRotate: 0
+  last_boxFineness: 0
+  index_currentScaleX: 0
+  index_currentScaleY: 0
+  index_currentAlpha: 0
+  index_currentCenterX: 0
+  index_currentCenterY: 0
+  index_currentLineAlpha: 0
+  index_currentMoveX: 0
+  index_currentMoveY: 0
+  index_currentRotate: 0
   raw_center: {x: 0.5, y: 0.5}
   center: {x: 0.5, y: 0.5}
   alpha: {r: 0, g: 0, b: 0, a: 1}
