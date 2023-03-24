@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 public class WebManager : MonoBehaviourSingleton<WebManager>
 {
     public string chartDataPath;
-    public ChartData chartData;
     public AudioClip musicClip;
     public Image background;
     public ChartData ChartData
@@ -28,9 +27,29 @@ public class WebManager : MonoBehaviourSingleton<WebManager>
     }
     private void Start()
     {
-        chartData = JsonConvert.DeserializeObject<ChartData>(Resources.Load<TextAsset>(chartDataPath).text);
-        ChartData = chartData;
+        //chartData = JsonConvert.DeserializeObject<ChartData>(Resources.Load<TextAsset>(chartDataPath).text);
+        //chartData = 
         MusicClip = musicClip;
         Background = background;
+        ChartData = ChartTools.CreateNew();
+        Chart.Instance.boxesEdit = new();
+        Chart.Instance.boxesEdit.Add(new());
+        Chart.Instance.boxesEdit[0].lines = new() { new(), new(), new(), new(), new() };
+        Chart.Instance.boxesEdit[0].boxEvents = new();
+        Chart.Instance.boxesEdit[0].boxEvents.scaleX = new();
+        Chart.Instance.boxesEdit[0].boxEvents.scaleY = new();
+        Chart.Instance.boxesEdit[0].boxEvents.moveX = new();
+        Chart.Instance.boxesEdit[0].boxEvents.moveY = new();
+        Chart.Instance.boxesEdit[0].boxEvents.centerX = new();
+        Chart.Instance.boxesEdit[0].boxEvents.centerY = new();
+        Chart.Instance.boxesEdit[0].boxEvents.alpha = new();
+        Chart.Instance.boxesEdit[0].boxEvents.lineAlpha = new();
+        Chart.Instance.boxesEdit[0].boxEvents.rotate = new();
+        for (int i = 0; i < Chart.Instance.boxesEdit[0].lines.Count; i++)
+        {
+            Chart.Instance.boxesEdit[0].lines[i].offlineNotes = new();
+            Chart.Instance.boxesEdit[0].lines[i].onlineNotes = new();
+            Chart.Instance.boxesEdit[0].lines[i].speed = new();
+        }
     }
 }

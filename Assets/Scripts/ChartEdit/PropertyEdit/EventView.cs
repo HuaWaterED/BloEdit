@@ -54,6 +54,10 @@ public class EventView : MonoBehaviour
                     VerticalLine.Instance.vLines[i].AddLineOrRemoveLine(0, VerticalLine.Instance.thisText.text);
                 }
             }
+            for (int i = 0; i < ChartPreviewEdit.Instance.noteLines.Count; i++)
+            {
+                ChartPreviewEdit.Instance.noteLines[i].RefreshNoteEdits();
+            }
         });
     }
 }

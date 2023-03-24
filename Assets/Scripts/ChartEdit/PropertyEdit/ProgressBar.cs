@@ -26,7 +26,7 @@ public class ProgressBar : MonoBehaviourSingleton<ProgressBar>
         progressBar.SetValueWithoutNotify(currentProgress);
         if (currentProgress >= .9999f)
         {
-            StateManager.RestartTime(On_Off.Instance.isContinuePlay.isOn);
+            StateManager.RestartTime(On_Off.Instance.isLoopPlay.isOn);
             for (int i = 0; i < ChartPreviewEdit.Instance.lines.Count; i++)
             {
                 ChartPreviewEdit.Instance.lines[i].ResetLastBPM(BPMManager.Instance.GetBPMWithSecondsTime(((float)ProgressManager.Instance.CurrentTime)));

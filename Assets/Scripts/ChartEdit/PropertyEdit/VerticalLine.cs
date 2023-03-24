@@ -11,6 +11,7 @@ public class VerticalLine : MonoBehaviourSingleton<VerticalLine>
     public Button u;
     public Button d;
     public List<VLines> vLines;
+    public List<VLines> eventVLines;
     private void Start()
     {
         u.onClick.AddListener(() =>
@@ -29,6 +30,10 @@ public class VerticalLine : MonoBehaviourSingleton<VerticalLine>
             }
             thisText.text = $"{int.Parse(thisText.text) - 1}";
         });
+        for (int i = 0; i < eventVLines.Count; i++)
+        {
+            eventVLines[i].AddLineOrRemoveLine(0, thisText.text);
+        }
     }
 
 }

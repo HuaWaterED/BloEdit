@@ -11,3 +11,16 @@ public enum Hard
     Yellow,
     Red
 }
+public enum EventType
+{
+    speed,
+    centerX,
+    centerY,
+    moveX,
+    moveY,
+    scaleX,
+    scaleY,
+    rotate,
+    alpha,
+    lineAlpha
+}

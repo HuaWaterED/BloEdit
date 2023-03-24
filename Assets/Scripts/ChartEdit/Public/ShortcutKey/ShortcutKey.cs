@@ -6,12 +6,16 @@ using UnityEngine;
 public class ShortcutKey : MonoBehaviour
 {
     public KeyCode keyCode;
+    public KeyCode keyCode2;
     public Action keyDown;
     public Action keyHold;
     public Action keyUp;
-    public ShortcutKey Init(KeyCode keyCode, Action keyDown, Action keyHold, Action keyUp)
+    public bool isDoublePress;
+    public ShortcutKey Init(KeyCode keyCode, KeyCode keyCode2, bool isDoublePress, Action keyDown, Action keyHold, Action keyUp)
     {
         this.keyCode = keyCode;
+        this.keyCode2 = keyCode2;
+        this.isDoublePress = isDoublePress;
         this.keyDown = keyDown;
         this.keyHold = keyHold;
         this.keyUp = keyUp;
@@ -19,17 +23,36 @@ public class ShortcutKey : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(keyCode))
+        if (isDoublePress)//多押
         {
-            keyDown();
+            if (Input.GetKey(keyCode) && Input.GetKeyDown(keyCode2))
+            {
+                keyDown();
+            }
+            if (Input.GetKey(keyCode) && Input.GetKey(keyCode2))
+            {
+                keyHold();
+            }
+            if (Input.GetKey(keyCode) && Input.GetKeyUp(keyCode2))
+            {
+                keyUp();
+            }
         }
-        if (Input.GetKey(keyCode))
+        else
         {
-            keyHold();
-        }
-        if (Input.GetKeyUp(keyCode))
-        {
-            keyUp();
+            //单压
+            if (Input.GetKeyDown(keyCode))
+            {
+                keyDown();
+            }
+            if (Input.GetKey(keyCode))
+            {
+                keyHold();
+            }
+            if (Input.GetKeyUp(keyCode))
+            {
+                keyUp();
+            }
         }
     }
 }

@@ -1,18 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class BoxNumber : MonoBehaviour
+public class BoxNumber : MonoBehaviourSingleton<BoxNumber>
 {
-    // Start is called before the first frame update
-    void Start()
+    public TextMeshProUGUI thisText;
+    public Button u;
+    public Button d;
+    private void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        u.onClick.AddListener(() =>
+        {
+            thisText.text = $"{int.Parse(thisText.text) + 1}";
+            for (int i = 0; i < ChartPreviewEdit.Instance.noteLines.Count; i++)
+            {
+                ChartPreviewEdit.Instance.noteLines[i].RefreshNoteEdits();
+            }
+        });
+        d.onClick.AddListener(() =>
+        {
+            thisText.text = $"{int.Parse(thisText.text) - 1}";
+            for (int i = 0; i < ChartPreviewEdit.Instance.noteLines.Count; i++)
+            {
+                ChartPreviewEdit.Instance.noteLines[i].RefreshNoteEdits();
+            }
+        });
     }
 }

@@ -5,5 +5,5 @@ using UnityEngine.UI;
 
 public class On_Off : MonoBehaviourSingleton<On_Off>
 {
-    public Toggle isContinuePlay;
+    public Toggle isLoopPlay;
 }

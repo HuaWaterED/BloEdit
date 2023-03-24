@@ -65,6 +65,7 @@ public class GameUtility
     /// <returns>返回一个位移图</returns>
     public static AnimationCurve CalculatedOffsetCurve(AnimationCurve canvasSpeed, List<Keyframe> keyframes)
     {
+        if (keyframes.Count == 0) return new();
         /*速度图的value等于位移图的斜率*/
         List<Keyframe> resultKeyframes = new()//声明一个列表，第一个点默认从0，0开始
         {

@@ -28,9 +28,9 @@ public class LineNoteController : MonoBehaviour
 
     private void Update()
     {
-        if (decideLineController.ThisLine.OnlineNotesLength > 0)
+        if (decideLineController.ThisLine.onlineNotes.Count > 0)
             Find_Get_Update_PassHit_Return(decideLineController.ThisLine.onlineNotes, ref lastOnlineIndex, ariseOnlineNotes, endTime_ariseOnlineNotes, true);
-        if (decideLineController.ThisLine.OfflineNotesLength > 0)
+        if (decideLineController.ThisLine.offlineNotes.Count > 0)
             Find_Get_Update_PassHit_Return(decideLineController.ThisLine.offlineNotes, ref lastOfflineIndex, ariseOfflineNotes, endTime_ariseOfflineNotes, false);
     }
 
