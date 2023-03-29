@@ -72,13 +72,13 @@ public class AddNote : ShortcutKeyEvent
         public_Linediv.noteEdits.Insert(index_noteEdits, instNote);
 
 
-        List<Blophy.ChartEdit.Note> onlineNotes = Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes;
+        List<Blophy.ChartEdit.Note> onlineNotes = Chart.Instance.chartEdit.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes;
         int index_onlineNotes = Algorithm.BinarySearch(onlineNotes, m => m.hitTime.thisStartBPM < instNote.thisNote.hitTime.thisStartBPM, false);
         onlineNotes.Insert(index_onlineNotes, instNote.thisNote);
 
         ChartTools.EditNote2ChartDataNote(
             Chart.Instance.chartData.boxes[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1],
-            Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes);
+            Chart.Instance.chartEdit.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes);
 
         Chart.Instance.RefreshPlayer();
     }

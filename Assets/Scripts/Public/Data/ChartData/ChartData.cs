@@ -38,6 +38,28 @@ namespace Blophy.Chart
                 chartNotes.onlineNotes.Add(note);
             }
         }
+        public static Blophy.ChartEdit.Box CreateNewBoxEdit()
+        {
+            Blophy.ChartEdit.Box box = new Blophy.ChartEdit.Box();
+            box.lines = new() { new(), new(), new(), new(), new() };
+            box.boxEvents = new();
+            box.boxEvents.scaleX = new();
+            box.boxEvents.scaleY = new();
+            box.boxEvents.moveX = new();
+            box.boxEvents.moveY = new();
+            box.boxEvents.centerX = new();
+            box.boxEvents.centerY = new();
+            box.boxEvents.alpha = new();
+            box.boxEvents.lineAlpha = new();
+            box.boxEvents.rotate = new();
+            for (int i = 0; i < box.lines.Count; i++)
+            {
+                box.lines[i].offlineNotes = new();
+                box.lines[i].onlineNotes = new();
+                box.lines[i].speed = new();
+            }
+            return box;
+        }
         public static ChartData CreateNew()
         {
             ChartData data = new();
@@ -47,19 +69,27 @@ namespace Blophy.Chart
             data.globalData.musicLength = AssetManager.Instance.musicPlayer.clip.samples / (float)AssetManager.Instance.musicPlayer.clip.frequency;
             data.metaData = new();
             data.boxes = new();
-            data.boxes.Add(new());
-            data.boxes[0].boxEvents = new();
-            data.boxes[0].lines = new();
-            data.boxes[0].lines.Add(new());
-            data.boxes[0].lines.Add(new());
-            data.boxes[0].lines.Add(new());
-            data.boxes[0].lines.Add(new());
-            data.boxes[0].lines.Add(new());
-            for (int i = 0; i < data.boxes[0].lines.Count; i++)
+            data.boxes.Add(NewBox());
+
+
+            return data;
+        }
+
+        public static Box NewBox()
+        {
+            Box box = new Box();
+            box.boxEvents = new();
+            box.lines = new();
+            box.lines.Add(new());
+            box.lines.Add(new());
+            box.lines.Add(new());
+            box.lines.Add(new());
+            box.lines.Add(new());
+            for (int i = 0; i < box.lines.Count; i++)
             {
                 Public_AnimationCurveEaseEnum.keyValuePairs.TryGetValue(0, out AnimationCurve linear);
-                data.boxes[0].lines[i].Speed = new();
-                data.boxes[0].lines[i].Speed.Add(new()
+                box.lines[i].Speed = new();
+                box.lines[i].Speed.Add(new()
                 {
                     startTime = 0,
                     endTime = 200,
@@ -67,22 +97,20 @@ namespace Blophy.Chart
                     endValue = 2,
                     curve = linear
                 });
-                SpeedEvents2Far(data.boxes[0].lines[i]);
-                data.boxes[0].lines[i].offlineNotes = new();
-                data.boxes[0].lines[i].onlineNotes = new();
+                SpeedEvents2Far(box.lines[i]);
+                box.lines[i].offlineNotes = new();
+                box.lines[i].onlineNotes = new();
             }
-            data.boxes[0].boxEvents.scaleX = new();
-            data.boxes[0].boxEvents.scaleY = new();
-            data.boxes[0].boxEvents.moveX = new();
-            data.boxes[0].boxEvents.moveY = new();
-            data.boxes[0].boxEvents.centerX = new();
-            data.boxes[0].boxEvents.centerY = new();
-            data.boxes[0].boxEvents.alpha = new();
-            data.boxes[0].boxEvents.lineAlpha = new();
-            data.boxes[0].boxEvents.rotate = new();
-
-
-            return data;
+            box.boxEvents.scaleX = new();
+            box.boxEvents.scaleY = new();
+            box.boxEvents.moveX = new();
+            box.boxEvents.moveY = new();
+            box.boxEvents.centerX = new();
+            box.boxEvents.centerY = new();
+            box.boxEvents.alpha = new();
+            box.boxEvents.lineAlpha = new();
+            box.boxEvents.rotate = new();
+            return box;
         }
 
         public static void SpeedEvents2Far(Line line)
@@ -157,7 +185,13 @@ namespace Blophy.Chart
     public class BPM
     {
         public int integer = 0;
+        /// <summary>
+        /// 分子
+        /// </summary>
         public int molecule = 0;
+        /// <summary>
+        /// 分母
+        /// </summary>
         public int denominator = 1;
         public float thisStartBPM => integer + molecule / (float)denominator;
         public float currentBPM;
@@ -200,10 +234,11 @@ namespace Blophy.Chart
             set
             {
                 speed = value;
-                List<Keyframe> keyframes = GameUtility.CalculatedSpeedCurve(value.ToArray());//将获得到的Key列表全部赋值
-                AnimationCurve canvasSpeed = new() { keys = keyframes.ToArray(), preWrapMode = WrapMode.ClampForever, postWrapMode = WrapMode.ClampForever };//把上边获得到的点转换为速度图
-                career = canvasSpeed;
-                far = GameUtility.CalculatedOffsetCurve(canvasSpeed, keyframes);//吧速度图转换为位移图
+                //speed = value;
+                //List<Keyframe> keyframes = GameUtility.CalculatedSpeedCurve(value.ToArray());//将获得到的Key列表全部赋值
+                //AnimationCurve canvasSpeed = new() { keys = keyframes.ToArray(), preWrapMode = WrapMode.ClampForever, postWrapMode = WrapMode.ClampForever };//把上边获得到的点转换为速度图
+                //career = canvasSpeed;
+                //far = GameUtility.CalculatedOffsetCurve(canvasSpeed, keyframes);//吧速度图转换为位移图
             }
         }
         public AnimationCurve far;//画布偏移绝对位置，距离
@@ -336,11 +371,13 @@ namespace Blophy.ChartEdit
         public bool isClockwise;//是逆时针
         public BPMTime endTime;
         public bool hasOther;//还有别的Note和他在统一时间被打击，简称多押标识（（
+        public bool isSelected;
     }
     [Serializable]
     //public struct Event
     public class Event
     {
+        public bool isSelected;
         public BPMTime startTime;
         public BPMTime endTime;
         public float startValue;
@@ -370,7 +407,13 @@ namespace Blophy.ChartEdit
     public class BPMTime
     {
         public int integer = 0;
+        /// <summary>
+        /// 分子
+        /// </summary>
         public int molecule = 0;
+        /// <summary>
+        /// 分母
+        /// </summary>
         public int denominator = 1;
         public float thisStartBPM => integer + molecule / (float)denominator;
         public BPMTime() { }

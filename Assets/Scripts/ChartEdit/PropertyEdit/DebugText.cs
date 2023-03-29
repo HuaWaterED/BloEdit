@@ -8,7 +8,8 @@ public class DebugText : MonoBehaviourSingleton<DebugText>
     public TextMeshProUGUI thisText;
     private void Update()
     {
-        thisText.text = $"Total/CurrentTime: {Chart.Instance.chartData.globalData.musicLength}/{ProgressManager.Instance.CurrentTime}\n" +
+        thisText.text =
+            $"Total/CurrentTime: {Chart.Instance.chartData.globalData.musicLength}/{ProgressManager.Instance.CurrentTime}\n" +
             $"CurrentFPS: {1 / GetSmoothDeltaTime():F2}\n" +
             $"CurrentPositionY：{YScale.Instance.GetPositionYWithSecondsTime((float)ProgressManager.Instance.CurrentTime)}\n" +
             $"ArisePositionY：{YScale.Instance.GetPositionYWithSecondsTime((float)(ProgressManager.Instance.CurrentTime + 10))}\n" +

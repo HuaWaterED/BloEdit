@@ -74,6 +74,7 @@ public class ProgressManager : MonoBehaviourSingleton<ProgressManager>
     public void OffsetTime(double time)
     {
         skipTime += time;
+        if (CurrentTime < 0) return;
         AssetManager.Instance.musicPlayer.time = (float)CurrentTime;
         ResetAllLineNoteState();
     }

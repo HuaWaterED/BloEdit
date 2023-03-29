@@ -5,6 +5,7 @@ using System.Collections;
 using static UnityEngine.Mathf;
 using System;
 using System.Collections.Generic;
+using TMPro;
 
 public class BoxController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class BoxController : MonoBehaviour
 
     public int sortSeed = 0;//层级顺序种子
     public SpriteMask spriteMask;//遮罩
+    public int thisBoxIndex;
+    public TextMeshPro boxNumberText;
 
     public float currentScaleX;
     public float currentScaleY;
@@ -76,7 +79,7 @@ public class BoxController : MonoBehaviour
     /// </summary>
     /// <param name="sortSeed">种子开始</param>
     /// <returns>返回自身</returns>
-    public BoxController SetSortSeed(int sortSeed)
+    public BoxController SetSortSeed(int sortSeed, int thisBoxIndex)
     {
         this.sortSeed = sortSeed;//设置我自己的遮罩到我自己
         spriteMask.frontSortingOrder = sortSeed + ValueManager.Instance.noteRendererOrder - 1;//遮罩种子+一共多少层-1（这个1是我自己占用了，所以减去）
@@ -85,6 +88,8 @@ public class BoxController : MonoBehaviour
         {
             spriteRenderers[i].sortingOrder = sortSeed;//赋值
         }
+        this.thisBoxIndex = thisBoxIndex;
+        boxNumberText.text = thisBoxIndex.ToString();
         return this;//返回自己
     }
     /// <summary>

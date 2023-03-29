@@ -1,6 +1,8 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class ShortcutKeyManager : MonoBehaviourSingleton<ShortcutKeyManager>
@@ -10,14 +12,27 @@ public class ShortcutKeyManager : MonoBehaviourSingleton<ShortcutKeyManager>
     public List<ShortcutKey> shortcutKeys = new();//召唤出来的预制件的列表
     public List<ShortcutKeyEvent> shortcutEventList = new();//事件列表
     public List<ShortcutKeyTable> shortcutKeyMap = new();
-    private IEnumerator Start()
+    private void Start()
     {
-        while (true)
+        if (File.Exists($"{Application.dataPath}/ShortcutKeyMap.HuaWaterED"))
         {
-            ReloadShortcutKey();
-            yield return new WaitForSeconds(5);
+            shortcutKeyMap = JsonConvert.DeserializeObject<List<ShortcutKeyTable>>(File.ReadAllText($"{Application.dataPath}/ShortcutKeyMap.HuaWaterED"));
+            Debug.Log("快捷键配置文件读取完成");
         }
+        else
+        {
+            Debug.LogError($"没找到配置文件，将使用默认快捷键配置！");
+        }
+        ReloadShortcutKey();
     }
+    //private IEnumerator Start()
+    //{
+    //    while (true)
+    //    {
+    //        ReloadShortcutKey();
+    //        yield return new WaitForSeconds(5);
+    //    }
+    //}
 
     private void ReloadShortcutKey()
     {
@@ -33,9 +48,9 @@ public class ShortcutKeyManager : MonoBehaviourSingleton<ShortcutKeyManager>
             ShortcutKeyEvent @event = null;
             for (int j = 0; j < shortcutEventList.Count; j++)
             {
-                if (shortcutEventList[i].eventID == shortcutKeyMap[i].eventID)
+                if (shortcutKeyMap[i].eventID == shortcutEventList[j].eventID)
                 {
-                    @event = shortcutEventList[i];
+                    @event = shortcutEventList[j];
                     break;
                 }
             }
@@ -44,11 +59,6 @@ public class ShortcutKeyManager : MonoBehaviourSingleton<ShortcutKeyManager>
                 .Init(shortcutKeyMap[i].keyCode, shortcutKeyMap[i].keyCode2, shortcutKeyMap[i].isDoublePress, @event.ExeDown, @event.Exe, @event.ExeUp);
             shortcutKeys.Add(instShortcutKey);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 }
 [Serializable]

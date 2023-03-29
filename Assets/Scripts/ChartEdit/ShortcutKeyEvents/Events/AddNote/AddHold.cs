@@ -1,13 +1,20 @@
 using Blophy.Chart;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class AddEvent : ShortcutKeyEvent
+public class AddHold : AddNote
 {
-    public EventEdit thisEvent;
+    public static AddHold Instance { get; private set; }
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = GetComponent<AddHold>();
+        }
+        else Destroy(this);
+    }
     public bool isFirstTime = false;
 
     public bool waitForPressureAgain = false;
@@ -15,21 +22,19 @@ public class AddEvent : ShortcutKeyEvent
 
 
     Public_LineDiv findedPublic_LineDiv = null;
-    EventEdit instEvent = null;
+    NoteEdit instNote = null;
     public override void ExeDown()
     {
-        Debug.Log("ExeAddEvent");
+        Debug.Log("ExeAddHold");
         if (!isFirstTime)
         {
             isFirstTime = true;
             //第一次
             GetNearestBeatLineAndVerticalLine(
             out BeatLine firstBeatLine, out VLine firstVLine, out findedPublic_LineDiv);
-            EventVLine eventVLine = (EventVLine)firstVLine;
-            instEvent = Instantiate(thisEvent, Vector2.zero, Quaternion.identity, findedPublic_LineDiv.notesCanvas.transform)
+            instNote = Instantiate(thisNote, Vector2.zero, Quaternion.identity, findedPublic_LineDiv.notesCanvas.transform)
            .Init(firstBeatLine, firstVLine, findedPublic_LineDiv);
-            eventVLine.eventsEditList.Add(instEvent);
-            StartCoroutine(WaitForPressureAgain(firstBeatLine, instEvent, eventVLine));
+            StartCoroutine(WaitForPressureAgain(firstBeatLine, instNote));
 
         }
         else if (isFirstTime)
@@ -40,7 +45,7 @@ public class AddEvent : ShortcutKeyEvent
         }
         else {/*报错*/}
     }
-    IEnumerator WaitForPressureAgain(BeatLine firstBeatLine, EventEdit instEvent, EventVLine eventVLine)
+    IEnumerator WaitForPressureAgain(BeatLine firstBeatLine, NoteEdit noteEdit)
     {
         BPM BPMData = null;
         while (true)
@@ -56,52 +61,35 @@ public class AddEvent : ShortcutKeyEvent
             float startSeconds = BPMManager.Instance.GetSecondsTimeWithBPMSeconds(firstBeatLine.thisBPM.thisStartBPM);
             float delta_Canvas = YScale.Instance.GetPositionYWithSecondsTime(endSeconds)
                 - YScale.Instance.GetPositionYWithSecondsTime(startSeconds);
-            instEvent.rectTransform.sizeDelta = new(instEvent.rectTransform.sizeDelta.x, delta_Canvas);
+            noteEdit.rectTransform.sizeDelta = new(noteEdit.rectTransform.sizeDelta.x, delta_Canvas);
             //
             yield return new WaitForEndOfFrame();
         }
         waitForPressureAgain = false;
-        instEvent.thisEvent.endTime = new(BPMData.integer, BPMData.molecule, BPMData.denominator);
+        noteEdit.thisNote.endTime = new(BPMData.integer, BPMData.molecule, BPMData.denominator);
 
-        //AddNoteEdit2Chart(eventVLine);
-        eventVLine.AddEventEdit2ChartDataEvent();
+        EventsEdit_Edit.Instance.UpdateEditingInfo(noteEdit, true);
+        AddNoteEdit2Chart();
     }
-    private void AddNoteEdit2Chart(EventVLine eventVLine)
+
+    private void AddNoteEdit2Chart()
     {
-
-        Blophy.ChartEdit.BoxEvents boxEvents = Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].boxEvents;
-        List<Blophy.ChartEdit.Event> thisEvents = eventVLine.eventType switch
-        {
-            EventType.centerX => boxEvents.centerX,
-            EventType.centerY => boxEvents.centerY,
-            EventType.moveX => boxEvents.moveX,
-            EventType.moveY => boxEvents.moveY,
-            EventType.scaleX => boxEvents.scaleX,
-            EventType.scaleY => boxEvents.scaleY,
-            EventType.rotate => boxEvents.rotate,
-            EventType.alpha => boxEvents.alpha,
-            EventType.lineAlpha => boxEvents.lineAlpha,
-            EventType.speed => null,
-            _ => throw new System.Exception("Ohhhhh...没找到对应的事件类型")
-        };
-        thisEvents ??= Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[0].speed
-                = Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[1].speed
-                = Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[2].speed
-                = Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[3].speed
-                = Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[4].speed;
-        //int index_boxEvents = Algorithm.BinarySearch(thisEvents, m => m.hitTime.thisStartBPM < instNote.thisNote.hitTime.thisStartBPM, false);
-        int index_thisEvents = Algorithm.BinarySearch(thisEvents, m => m.startTime.thisStartBPM < instEvent.thisEvent.startTime.thisStartBPM, false);
-        thisEvents.Insert(index_thisEvents, instEvent.thisEvent);
+        int index_noteEdits = Algorithm.BinarySearch(findedPublic_LineDiv.noteEdits, m => m.thisNote.hitTime.thisStartBPM < instNote.thisNote.hitTime.thisStartBPM, false);
+        findedPublic_LineDiv.noteEdits.Insert(index_noteEdits, instNote);
 
 
-        //ChartTools.EditNote2ChartDataNote(
-        //    Chart.Instance.chartData.boxes[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1],
-        //    Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes);
+        List<Blophy.ChartEdit.Note> onlineNotes = Chart.Instance.chartEdit.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes;
+        int index_onlineNotes = Algorithm.BinarySearch(onlineNotes, m => m.hitTime.thisStartBPM < instNote.thisNote.hitTime.thisStartBPM, false);
+        onlineNotes.Insert(index_onlineNotes, instNote.thisNote);
 
-        //ChartTools.EditEvent2ChartDataEvent(Chart.Instance.chartData.boxes[int.Parse(BoxNumber.Instance.thisText.text) - 1].boxEvents.moveX, thisEvents);
+
+        ChartTools.EditNote2ChartDataNote(
+            Chart.Instance.chartData.boxes[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1],
+            Chart.Instance.chartEdit.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes);
 
         Chart.Instance.RefreshPlayer();
     }
+
     private static void GetNearestBeatLineAndVerticalLine(out BeatLine nearestBeatLine, out VLine nearestVerticalLine, out Public_LineDiv public_Linediv)
     {
         nearestBeatLine = null;//最近的节拍线
@@ -109,11 +97,11 @@ public class AddEvent : ShortcutKeyEvent
         public_Linediv = null;
         //float currentNearestDistance = 10000;
         float currentNearestBeatLine = 10000;
-        float currentNearestVerticalLine = 10000;
-        for (int i = 0; i < ChartPreviewEdit.Instance.eventLines.Count; i++)
+        float currentNearestVerticalLine = 1000;
+        for (int i = 0; i < ChartPreviewEdit.Instance.noteLines.Count; i++)
         {
-            if (!ChartPreviewEdit.Instance.eventLines[i].gameObject.activeInHierarchy) continue;
-            foreach (BeatLine beatLine in ChartPreviewEdit.Instance.eventLines[i].beatLines)
+            if (!ChartPreviewEdit.Instance.noteLines[i].gameObject.activeInHierarchy) continue;
+            foreach (BeatLine beatLine in ChartPreviewEdit.Instance.noteLines[i].beatLines)
             {
                 //Input.mousePosition-beatLine.transform.position
                 RectTransformUtility.ScreenPointToWorldPointInRectangle(ShortcutKeyEvents.Instance.canvas.transform as RectTransform, Input.mousePosition, null, out Vector3 beatLine_worldPosition);
@@ -122,13 +110,13 @@ public class AddEvent : ShortcutKeyEvent
                 {
                     nearestBeatLine = beatLine;
                     currentNearestBeatLine = beatLine_distance.magnitude;
-                    public_Linediv = ChartPreviewEdit.Instance.eventLines[i];
+                    public_Linediv = ChartPreviewEdit.Instance.noteLines[i];
                 }
             }
 
 
 
-            foreach (EventVLines vLine in VerticalLine.Instance.eventVLines.Cast<EventVLines>())
+            foreach (VLines vLine in VerticalLine.Instance.vLines)
             {
                 if (!vLine.gameObject.activeInHierarchy) continue;
                 RectTransformUtility.ScreenPointToWorldPointInRectangle(ShortcutKeyEvents.Instance.canvas.transform as RectTransform, Input.mousePosition, null, out Vector3 verticalRightLine_worldPosition);

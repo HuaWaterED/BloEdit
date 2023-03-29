@@ -18,6 +18,10 @@ public class BoxNumber : MonoBehaviourSingleton<BoxNumber>
             {
                 ChartPreviewEdit.Instance.noteLines[i].RefreshNoteEdits();
             }
+            for (int i = 0; i < ChartPreviewEdit.Instance.eventLines.Count; i++)
+            {
+                ChartPreviewEdit.Instance.eventLines[i].RefreshNoteEdits();
+            }
         });
         d.onClick.AddListener(() =>
         {
@@ -25,6 +29,10 @@ public class BoxNumber : MonoBehaviourSingleton<BoxNumber>
             for (int i = 0; i < ChartPreviewEdit.Instance.noteLines.Count; i++)
             {
                 ChartPreviewEdit.Instance.noteLines[i].RefreshNoteEdits();
+            }
+            for (int i = 0; i < ChartPreviewEdit.Instance.eventLines.Count; i++)
+            {
+                ChartPreviewEdit.Instance.eventLines[i].RefreshNoteEdits();
             }
         });
     }

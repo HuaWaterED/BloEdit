@@ -8,6 +8,7 @@ public class DragEdit : NoteEdit
     {
         base.Init(beatLine, vline, public_LineDiv);
         thisNote.noteType = Blophy.Chart.NoteType.Drag;
+        EventsEdit_Edit.Instance.UpdateEditingInfo(this, true);
         return this;
     }
 }

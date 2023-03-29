@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6117647}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -134,18 +134,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d63886be1d8af64aa8b18be1a854c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisButton: {fileID: 0}
   thisNote:
-    noteType: 0
+    noteType: 1
     effect: 0
     hitTime:
-      integer: 0
+      integer: 1
       molecule: 0
-      denominator: 1
-    positionX: 0
+      denominator: 4
+    positionX: -1
     isClockwise: 0
-    holdTime:
-      integer: 0
-      molecule: 0
-      denominator: 1
+    endTime:
+      integer: 1
+      molecule: 2
+      denominator: 4
     hasOther: 0
+    isSelected: 0
   rectTransform: {fileID: 3304603191443889193}
+  isRefresh: 0
+  image: {fileID: 3304603191443889195}

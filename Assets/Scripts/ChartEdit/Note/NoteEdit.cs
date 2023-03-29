@@ -4,12 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NoteEdit : MonoBehaviour
+public class NoteEdit : Public_Button
 {
     //new Vector2(nearestVerticalLine.transform.position.x, nearestBeatLine.transform.position.y)
     public Note thisNote;
     public RectTransform rectTransform;
     public bool isRefresh = false;
+
+    public Image image;
+    public override void OnStart()
+    {
+        thisButton.onClick.AddListener(() =>
+        {
+            Debug.Log("EventEditButtonExe");
+            EventsEdit_Edit.Instance.UpdateEditingInfo(this, true);
+        });
+    }
     public NoteEdit IsRefresh()
     {
         isRefresh = true;
@@ -32,6 +42,9 @@ public class NoteEdit : MonoBehaviour
             thisNote.hitTime = tempNote.hitTime;
             thisNote.effect = tempNote.effect;
             thisNote.endTime = tempNote.endTime;
+            thisNote.noteType = tempNote.noteType;
+            thisNote.isClockwise = tempNote.isClockwise;
+
         }
         else
         {

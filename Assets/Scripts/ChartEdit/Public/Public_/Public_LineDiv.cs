@@ -43,7 +43,7 @@ public class Public_LineDiv : MonoBehaviour
             exeBoxNumber = int.Parse(BoxNumber.Instance.thisText.text) - 1;
             exeLineNumber = int.Parse(LineNumber.Instance.thisText.text) - 1;
         }
-        List<Blophy.ChartEdit.Note> notesOnThisCanvas = Chart.Instance.boxesEdit[exeBoxNumber].lines[exeLineNumber].onlineNotes;
+        List<Blophy.ChartEdit.Note> notesOnThisCanvas = Chart.Instance.chartEdit.boxesEdit[exeBoxNumber].lines[exeLineNumber].onlineNotes;
         for (int i = 0; i < notesOnThisCanvas.Count; i++)
         {
             NoteEdit note = notesOnThisCanvas[i].noteType switch
@@ -60,10 +60,10 @@ public class Public_LineDiv : MonoBehaviour
             note.thisNote = notesOnThisCanvas[i];
             NoteEdit instNote = Instantiate(note, Vector2.zero, Quaternion.identity, notesCanvas.transform).IsRefresh().Init(note.thisNote.hitTime, note.thisNote.positionX, this);
             noteEdits.Add(instNote);
-            ChartTools.EditNote2ChartDataNote(
-            Chart.Instance.chartData.boxes[exeBoxNumber].lines[exeLineNumber],
-            Chart.Instance.boxesEdit[exeBoxNumber].lines[exeLineNumber].onlineNotes);
         }
+        ChartTools.EditNote2ChartDataNote(
+        Chart.Instance.chartData.boxes[exeBoxNumber].lines[exeLineNumber],
+        Chart.Instance.chartEdit.boxesEdit[exeBoxNumber].lines[exeLineNumber].onlineNotes);
     }
     private void Update()
     {
@@ -82,6 +82,7 @@ public class Public_LineDiv : MonoBehaviour
             lastBPM.AddOneBeat();
         }
         float BPMSeconds = BPMManager.Instance.GetBPMSecondsWithSecondsTime((float)ProgressManager.Instance.CurrentTime);
+        //int beatLinesCount = beatLines.Count;
         for (int i = 0; i < beatLines.Count; i++)
         {
             while (beatLines[i].thisBPM.thisStartBPM < BPMSeconds)

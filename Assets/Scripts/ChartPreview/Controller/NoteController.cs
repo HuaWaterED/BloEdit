@@ -30,7 +30,7 @@ public class NoteController : MonoBehaviour
 
     public Transform noteCanvas;//音符画布的引用
 
-    public float PointNoteCurrentOffset => decideLineController.canvasLocalOffset.Evaluate((float)ProgressManager.Instance.CurrentTime);//根据当前速度计算出按照当前的位移就是现在的Point应该在的位置
+    public float PointNoteCurrentOffset => decideLineController.CanvasLocalOffset.Evaluate((float)ProgressManager.Instance.CurrentTime);//根据当前速度计算出按照当前的位移就是现在的Point应该在的位置
     /// <summary>
     /// 从对象池出来召唤一次
     /// </summary>

@@ -1,38 +1,72 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EventsEdit_LineDiv : Public_LineDiv
 {
-    public override void RefreshNoteEdits()
+    public EventEdit eventEditPrefab;
+    public override void RefreshNoteEdits()//刷新方框事件
     {
         ClearAllEvents();
         List<VLines> eventVLines = VerticalLine.Instance.eventVLines;
-        int currentBoxNumber = int.Parse(BoxNumber.Instance.thisText.text);
-        //var thisBoxEvents=
-        /*
-         * List<Blophy.ChartEdit.Note> notesOnThisCanvas = Chart.Instance.boxesEdit[exeBoxNumber].lines[exeLineNumber].onlineNotes;
-        for (int i = 0; i < notesOnThisCanvas.Count; i++)
+        int currentBoxNumber = int.Parse(BoxNumber.Instance.thisText.text) - 1;
+
+        for (int i = 0; i < eventVLines.Count; i++)
         {
-            NoteEdit note = notesOnThisCanvas[i].noteType switch
+            EventVLine edgeLeftVerticalLine = (EventVLine)eventVLines[i].edgeLeftVerticalLine;
+            EventVLine edgeRightVerticalLine = (EventVLine)eventVLines[i].edgeRightVerticalLine;
+            UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].lines[0].speed, edgeLeftVerticalLine);
+            UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].boxEvents.lineAlpha, edgeRightVerticalLine);
+            for (int j = 0; j < eventVLines[i].middleLines.Count; j++)
             {
-                NoteType.Tap => AddTap.Instance.thisNote,
-                NoteType.Hold => AddHold.Instance.thisNote,
-                NoteType.Drag => AddDrag.Instance.thisNote,
-                NoteType.Flick => AddFlick.Instance.thisNote,
-                NoteType.Point => AddPoint.Instance.thisNote,
-                NoteType.FullFlickPink => AddFullFlick.Instance.thisNote,
-                NoteType.FullFlickBlue => AddFullFlick.Instance.thisNote,
-                _ => throw new System.Exception("哼哼啊啊啊啊啊啊啊啊啊1145141919810，你知道为什么报错嘛？哼哼啊啊啊啊啊啊啊啊啊，报错的原因是，没有找到音符类型哼哼啊啊啊啊啊啊啊啊啊")
-            };
-            note.thisNote = notesOnThisCanvas[i];
-            NoteEdit instNote = Instantiate(note, Vector2.zero, Quaternion.identity, notesCanvas.transform).IsRefresh().Init(note.thisNote.hitTime, note.thisNote.positionX, this);
-            noteEdits.Add(instNote);
-            ChartTools.EditNote2ChartDataNote(
-            Chart.Instance.chartData.boxes[exeBoxNumber].lines[exeLineNumber],
-            Chart.Instance.boxesEdit[exeBoxNumber].lines[exeLineNumber].onlineNotes);
+                EventVLine middleVLine = (EventVLine)eventVLines[i].middleLines[j];
+                switch (middleVLine.eventType)
+                {
+                    case EventType.centerX:
+                        UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].boxEvents.centerX, middleVLine);
+                        break;
+                    case EventType.centerY:
+                        UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].boxEvents.centerY, middleVLine);
+                        break;
+                    case EventType.moveX:
+                        UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].boxEvents.moveX, middleVLine);
+                        break;
+                    case EventType.moveY:
+                        UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].boxEvents.moveY, middleVLine);
+                        break;
+                    case EventType.scaleX:
+                        UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].boxEvents.scaleX, middleVLine);
+                        break;
+                    case EventType.scaleY:
+                        UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].boxEvents.scaleY, middleVLine);
+                        break;
+                    case EventType.rotate:
+                        UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].boxEvents.rotate, middleVLine);
+                        break;
+                    case EventType.alpha:
+                        UpdateSingleEvents(Chart.Instance.chartEdit.boxesEdit[currentBoxNumber].boxEvents.alpha, middleVLine);
+                        break;
+                }
+            }
         }
-         */
+        //EventsEdit_Edit.Instance.UpdateEditingInfo(selectedEventEdit);
+    }
+
+    private void UpdateSingleEvents(List<Blophy.ChartEdit.Event> events, EventVLine eventVLine)
+    {
+        for (int i = 0; i < events.Count; i++)
+        {
+            Blophy.ChartEdit.Event currentEvent = events[i];
+            EventEdit instEventEdit = Instantiate(eventEditPrefab, notesCanvas.transform);
+            instEventEdit.thisEvent = currentEvent;
+            instEventEdit.IsRefresh();
+            instEventEdit.Init(currentEvent.startTime, eventVLine, this);
+            eventVLine.eventsEditList.Add(instEventEdit);
+
+            if (currentEvent.isSelected)
+                EventsEdit_Edit.Instance.UpdateEditingInfo(instEventEdit, false);
+        }
     }
 
     private static void ClearAllEvents()
@@ -45,24 +79,24 @@ public class EventsEdit_LineDiv : Public_LineDiv
 
             for (int j = 0; j < edgeLeftVerticalLine.eventsEditList.Count; j++)
             {
-                EventEdit eventEdit = edgeLeftVerticalLine.eventsEditList[i];
+                EventEdit eventEdit = edgeLeftVerticalLine.eventsEditList[j];
                 Destroy(eventEdit.gameObject);
             }
             edgeLeftVerticalLine.eventsEditList.Clear();
 
             for (int j = 0; j < edgeRightVerticalLine.eventsEditList.Count; j++)
             {
-                EventEdit eventEdit = edgeRightVerticalLine.eventsEditList[i];
+                EventEdit eventEdit = edgeRightVerticalLine.eventsEditList[j];
                 Destroy(eventEdit.gameObject);
             }
-            edgeLeftVerticalLine.eventsEditList.Clear();
+            edgeRightVerticalLine.eventsEditList.Clear();
 
             for (int j = 0; j < eventVLines[i].middleLines.Count; j++)
             {
                 EventVLine eventVLine = (EventVLine)eventVLines[i].middleLines[j];
-                for (int k = 0; k < edgeRightVerticalLine.eventsEditList.Count; k++)
+                for (int k = 0; k < eventVLine.eventsEditList.Count; k++)
                 {
-                    EventEdit eventEdit = eventVLine.eventsEditList[i];
+                    EventEdit eventEdit = eventVLine.eventsEditList[k];
                     Destroy(eventEdit.gameObject);
                 }
                 eventVLine.eventsEditList.Clear();

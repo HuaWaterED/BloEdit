@@ -21,7 +21,7 @@ public class HoldController : NoteController
     /// </summary>
     public override void Init()
     {
-        AnimationCurve localOffset = decideLineController.canvasLocalOffset;//拿到位移图的索引
+        AnimationCurve localOffset = decideLineController.CanvasLocalOffset;//拿到位移图的索引
         holdBody.transform.localScale = //设置缩放
         Vector2.up * (localOffset.Evaluate(thisNote.EndTime) - localOffset.Evaluate(thisNote.hitTime)) + Vector2.right;
         isMissed = false;   //重置状态
@@ -138,7 +138,7 @@ public class HoldController : NoteController
 
     public override void PassHitTime(double currentTime)
     {
-        AnimationCurve localOffset = decideLineController.canvasLocalOffset;//拿到位移图的索引
+        AnimationCurve localOffset = decideLineController.CanvasLocalOffset;//拿到位移图的索引
         transform.localPosition = new Vector2(transform.localPosition.x, -noteCanvas.localPosition.y);//将位置保留到判定线的位置
         holdBody.transform.localScale = new Vector2(1, localOffset.Evaluate(thisNote.EndTime) - localOffset.Evaluate((float)currentTime));//设置缩放
     }

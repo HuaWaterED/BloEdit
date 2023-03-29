@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShowEdit : MonoBehaviour
+public class ShowEdit : MonoBehaviourSingleton<ShowEdit>
 {
     public Button thisButton;
     public GameObject edit;
@@ -13,9 +13,14 @@ public class ShowEdit : MonoBehaviour
         thisButton = GetComponent<Button>();
         thisButton.onClick.AddListener(() =>
         {
-            if (isOn) isOn = false;
-            else isOn = true;
-            edit.SetActive(isOn);
+            Show();
         });
+    }
+
+    public void Show()
+    {
+        if (isOn) isOn = false;
+        else isOn = true;
+        edit.SetActive(isOn);
     }
 }

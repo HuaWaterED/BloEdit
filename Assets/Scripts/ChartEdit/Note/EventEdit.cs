@@ -2,22 +2,43 @@ using Blophy.ChartEdit;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class EventEdit : MonoBehaviour
+public class EventEdit : Public_Button
 {
+
     public RectTransform rectTransform;
     public Blophy.ChartEdit.Event thisEvent;
     public bool isRefresh = false;
 
+    public EventVLine eventVLine;
+    public Image image;
+
+    public override void OnStart()
+    {
+        thisButton.onClick.AddListener(() =>
+        {
+            Debug.Log("EventEditButtonExe");
+            EventsEdit_Edit.Instance.UpdateEditingInfo(this, true);
+        });
+    }
+
     public EventEdit Init(BeatLine beatLine, VLine vline, Public_LineDiv public_LineDiv)
     {
+        eventVLine = (EventVLine)vline;
         BPMTime bpmTime = new() { integer = beatLine.thisBPM.integer, denominator = beatLine.thisBPM.denominator, molecule = beatLine.thisBPM.molecule };
         return Init(bpmTime, vline.positionX, public_LineDiv);
     }
+    public void RefreshThisEventsList() => eventVLine.AddEventEdit2ChartDataEvent(true);
     public EventEdit IsRefresh()
     {
         isRefresh = true;
         return this;
+    }
+    public EventEdit Init(BPMTime bpmTime, VLine vline, Public_LineDiv public_LineDiv)
+    {
+        eventVLine = (EventVLine)vline;
+        return Init(bpmTime, vline.positionX, public_LineDiv);
     }
     public virtual EventEdit Init(BPMTime bpmTime, float positionX, Public_LineDiv public_LineDiv)
     {
@@ -36,6 +57,16 @@ public class EventEdit : MonoBehaviour
             thisEvent.startValue = tempEvent.startValue;
             thisEvent.endValue = tempEvent.endValue;
             thisEvent.curve = tempEvent.curve;
+            thisEvent.isSelected = tempEvent.isSelected;
+            if (thisEvent.isSelected)
+            {
+                image.color = Color.white;
+            }
+            float endSeconds = BPMManager.Instance.GetSecondsTimeWithBPMSeconds(thisEvent.endTime.thisStartBPM);
+            float startSeconds = BPMManager.Instance.GetSecondsTimeWithBPMSeconds(thisEvent.startTime.thisStartBPM);
+            float delta_Canvas = YScale.Instance.GetPositionYWithSecondsTime(endSeconds)
+                - YScale.Instance.GetPositionYWithSecondsTime(startSeconds);
+            rectTransform.sizeDelta = new(rectTransform.sizeDelta.x, delta_Canvas);
         }
         else
         {
@@ -45,8 +76,8 @@ public class EventEdit : MonoBehaviour
             thisEvent.startTime = bpmTime;
             Public_AnimationCurveEaseEnum.keyValuePairs.TryGetValue(1, out AnimationCurve curve);
             thisEvent.curve = curve;
+            HoldLengthHandle();
         }
-        HoldLengthHandle();
         float canvasLocalPositionX = (public_LineDiv.vLines.edgeRightVerticalLine.transform.localPosition - public_LineDiv.vLines.edgeLeftVerticalLine.transform.localPosition).x / 2 * positionX;
         float canvasLocalPositionY = YScale.Instance.GetPositionYWithSecondsTime(BPMManager.Instance.GetSecondsTimeWithBPMSeconds(thisEvent.startTime.thisStartBPM));
         transform.localPosition = new Vector2(canvasLocalPositionX, canvasLocalPositionY);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Pause : MonoBehaviour
+public class Pause : MonoBehaviourSingleton<Pause>
 {
     public Button thisButton;
     private void Start()
@@ -11,10 +11,13 @@ public class Pause : MonoBehaviour
         thisButton = GetComponent<Button>();
         thisButton.onClick.AddListener(() =>
         {
-            StateManager.Instance.IsPause = true;
-
-
+            PauseBack();
 
         });
+    }
+
+    public void PauseBack()
+    {
+        StateManager.Instance.IsPause = true;
     }
 }
