@@ -12,7 +12,7 @@ public class SetProgress : ShortcutKeyEvent
     private void Update()
     {
         float delta = Input.GetAxis("Mouse ScrollWheel");
-        if (delta == 0)
+        if (delta == 0 || ProgressManager.Instance.CurrentTime + delta < 0)
         {
             return;
         }

@@ -32,25 +32,26 @@ public class NoteEdit : Public_Button
     }
     public virtual NoteEdit Init(BPMTime bpmTime, float positionX, Public_LineDiv public_LineDiv)
     {
-        Note tempNote = thisNote;
 
-        thisNote = new();
         if (isRefresh)
         {
-            isRefresh = false;
-            thisNote.positionX = tempNote.positionX;
-            thisNote.hitTime = tempNote.hitTime;
-            thisNote.effect = tempNote.effect;
-            thisNote.endTime = tempNote.endTime;
-            thisNote.noteType = tempNote.noteType;
-            thisNote.isClockwise = tempNote.isClockwise;
+            //Note tempNote = thisNote;
+
+            //thisNote = new();
+            //isRefresh = false;
+            //thisNote.positionX = tempNote.positionX;
+            //thisNote.hitTime = tempNote.hitTime;
+            //thisNote.effect = tempNote.effect;
+            //thisNote.endTime = tempNote.endTime;
+            //thisNote.noteType = tempNote.noteType;
+            //thisNote.isClockwise = tempNote.isClockwise;
 
         }
         else
         {
             thisNote.positionX = positionX;
             thisNote.hitTime = new(bpmTime.integer, bpmTime.molecule, bpmTime.denominator);
-            thisNote.effect = Blophy.Chart.NoteEffect.Ripple & Blophy.Chart.NoteEffect.CommonEffect;
+            thisNote.effect = Blophy.Chart.NoteEffect.Ripple | Blophy.Chart.NoteEffect.CommonEffect;
         }
         HoldLengthHandle();
         float canvasLocalPositionX = (public_LineDiv.vLines.edgeRightVerticalLine.transform.localPosition - public_LineDiv.vLines.edgeLeftVerticalLine.transform.localPosition).x / 2 * thisNote.positionX;

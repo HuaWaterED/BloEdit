@@ -25,10 +25,27 @@ public class Chart : MonoBehaviourSingleton<Chart>
             Debug.Log("刷新了事件编辑");
         }
     }
-    public void Refresh()
+    public void Refresh(bool isNoteEditing = false)
     {
-        Instance.RefreshChart();
-        Instance.RefreshPlayer();
+        if (isNoteEditing)
+        {
+            ChartPreviewEdit.DestoryAllBeatLines();
+            //for (int i = 0; i < ChartPreviewEdit.Instance.eventLines.Count; i++)
+            //{
+            //    ChartPreviewEdit.Instance.eventLines[i].RefreshNoteEdits();
+            //    Debug.Log("刷新了事件编辑");
+            //}
+            for (int i = 0; i < ChartPreviewEdit.Instance.noteLines.Count; i++)
+            {
+                ChartPreviewEdit.Instance.noteLines[i].RefreshNoteEdits();
+            }
+            Instance.RefreshPlayer();
+        }
+        else
+        {
+            Instance.RefreshChart();
+            Instance.RefreshPlayer();
+        }
     }
 }
 [Serializable]

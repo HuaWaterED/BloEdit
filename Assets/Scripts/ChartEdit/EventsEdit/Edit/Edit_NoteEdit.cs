@@ -32,7 +32,7 @@ public class Edit_NoteEdit : MonoBehaviour
                 6 => NoteType.Flick,
                 _ => throw new System.Exception("呜呜呜，，，没找到音符类型，唔姆（低下头，小声嘀咕）")
             };
-            Chart.Instance.Refresh();
+            Chart.Instance.Refresh(true);
         });
         noteEffect.onValueChanged.AddListener((value) =>
         {
@@ -47,8 +47,7 @@ public class Edit_NoteEdit : MonoBehaviour
             {
                 true => noteEdit.thisNote.effect |= NoteEffect.CommonEffect,
                 false => noteEdit.thisNote.effect &= ~NoteEffect.CommonEffect
-            };
-            Chart.Instance.Refresh();
+            }; Chart.Instance.Refresh(true);
         });
         noteRipple.onValueChanged.AddListener((value) =>
         {
@@ -56,8 +55,7 @@ public class Edit_NoteEdit : MonoBehaviour
             {
                 true => noteEdit.thisNote.effect |= NoteEffect.Ripple,
                 false => noteEdit.thisNote.effect &= ~NoteEffect.Ripple
-            };
-            Chart.Instance.Refresh();
+            }; Chart.Instance.Refresh(true);
         });
         hitTime.onValueChanged.AddListener((value) =>
         {
@@ -74,7 +72,7 @@ public class Edit_NoteEdit : MonoBehaviour
                     noteEdit.thisNote.endTime.denominator = int.Parse(match.Groups[3].Value);
                     endTime.text = $"{noteEdit.thisNote.endTime.integer}:{noteEdit.thisNote.endTime.molecule}/{noteEdit.thisNote.endTime.denominator}";
                 }
-                Chart.Instance.Refresh();
+                Chart.Instance.Refresh(true);
             }
         });
 
@@ -87,7 +85,7 @@ public class Edit_NoteEdit : MonoBehaviour
                 noteEdit.thisNote.endTime.integer = int.Parse(match.Groups[1].Value);
                 noteEdit.thisNote.endTime.molecule = int.Parse(match.Groups[2].Value);
                 noteEdit.thisNote.endTime.denominator = int.Parse(match.Groups[3].Value);
-                Chart.Instance.Refresh();
+                Chart.Instance.Refresh(true);
             }
         });
         positionX.onValueChanged.AddListener((value) =>
@@ -95,13 +93,13 @@ public class Edit_NoteEdit : MonoBehaviour
             if (float.TryParse(value, out float result))
             {
                 noteEdit.thisNote.positionX = result;
-                Chart.Instance.Refresh();
+                Chart.Instance.Refresh(true);
             }
         });
         isClockwise.onValueChanged.AddListener((value) =>
         {
             noteEdit.thisNote.isClockwise = value;
-            Chart.Instance.Refresh();
+            Chart.Instance.Refresh(true);
         });
     }
 

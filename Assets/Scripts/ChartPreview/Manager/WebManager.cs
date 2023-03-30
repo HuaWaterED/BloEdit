@@ -89,12 +89,12 @@ public class WebManager : MonoBehaviourSingleton<WebManager>
             boxList.RefreshList();
             Chart.Instance.Refresh();
              */
-            Chart.Instance.chartData.boxes.Clear();
+            ChartData.boxes.Clear();
             for (int i = 0; i < Chart.Instance.chartEdit.boxesEdit.Count; i++)
             {
-                Chart.Instance.chartData.boxes.Add(ChartTools.NewBox());
+                ChartData.boxes.Add(ChartTools.NewBox());
             }
-            BoxManager.Instance.RefreshList();
+            //BoxManager.Instance.RefreshList();
         }
         else
         {
@@ -111,8 +111,18 @@ public class WebManager : MonoBehaviourSingleton<WebManager>
         //{
         //}
         Chart.Instance.Refresh();
+        for (int i = 0; i < Chart.Instance.chartEdit.boxesEdit.Count; i++)
+        {
+            for (int j = 0; j < Chart.Instance.chartEdit.boxesEdit[i].lines.Count; j++)
+            {
+                int exeBoxNumber = i;
+                int exeLineNumber = j;
+                ChartTools.EditNote2ChartDataNote(
+        Chart.Instance.chartData.boxes[exeBoxNumber].lines[exeLineNumber],
+        Chart.Instance.chartEdit.boxesEdit[exeBoxNumber].lines[exeLineNumber].onlineNotes);
+            }
+        }
     }
-
     IEnumerator LoadMusicPack(string musicPath, string CPPath)
     {
         if (File.Exists(musicPath) && File.Exists(CPPath))//如果文件存在

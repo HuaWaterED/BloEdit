@@ -8,6 +8,7 @@ public class FullFlickEdit : NoteEdit
     {
         base.Init(beatLine, vline, public_LineDiv);
         thisNote.noteType = Blophy.Chart.NoteType.FullFlickBlue;
+        thisNote.effect = Blophy.Chart.NoteEffect.Ripple;
         EventsEdit_Edit.Instance.UpdateEditingInfo(this, true);
         return this;
     }

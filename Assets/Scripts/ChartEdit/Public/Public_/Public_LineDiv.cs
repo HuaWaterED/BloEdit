@@ -1,4 +1,5 @@
 using Blophy.Chart;
+using Blophy.ChartEdit;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,7 +47,7 @@ public class Public_LineDiv : MonoBehaviour
         List<Blophy.ChartEdit.Note> notesOnThisCanvas = Chart.Instance.chartEdit.boxesEdit[exeBoxNumber].lines[exeLineNumber].onlineNotes;
         for (int i = 0; i < notesOnThisCanvas.Count; i++)
         {
-            NoteEdit note = notesOnThisCanvas[i].noteType switch
+            NoteEdit instNote = Instantiate(notesOnThisCanvas[i].noteType switch
             {
                 NoteType.Tap => AddTap.Instance.thisNote,
                 NoteType.Hold => AddHold.Instance.thisNote,
@@ -56,9 +57,22 @@ public class Public_LineDiv : MonoBehaviour
                 NoteType.FullFlickPink => AddFullFlick.Instance.thisNote,
                 NoteType.FullFlickBlue => AddFullFlick.Instance.thisNote,
                 _ => throw new System.Exception("哼哼啊啊啊啊啊啊啊啊啊1145141919810，你知道为什么报错嘛？哼哼啊啊啊啊啊啊啊啊啊，报错的原因是，没有找到音符类型哼哼啊啊啊啊啊啊啊啊啊")
-            };
-            note.thisNote = notesOnThisCanvas[i];
-            NoteEdit instNote = Instantiate(note, Vector2.zero, Quaternion.identity, notesCanvas.transform).IsRefresh().Init(note.thisNote.hitTime, note.thisNote.positionX, this);
+
+            }, Vector2.zero, Quaternion.identity, notesCanvas.transform);
+            //NoteEdit note = notesOnThisCanvas[i].noteType switch
+            //{
+            //    NoteType.Tap => AddTap.Instance.thisNote,
+            //    NoteType.Hold => AddHold.Instance.thisNote,
+            //    NoteType.Drag => AddDrag.Instance.thisNote,
+            //    NoteType.Flick => AddFlick.Instance.thisNote,
+            //    NoteType.Point => AddPoint.Instance.thisNote,
+            //    NoteType.FullFlickPink => AddFullFlick.Instance.thisNote,
+            //    NoteType.FullFlickBlue => AddFullFlick.Instance.thisNote,
+            //    _ => throw new System.Exception("哼哼啊啊啊啊啊啊啊啊啊1145141919810，你知道为什么报错嘛？哼哼啊啊啊啊啊啊啊啊啊，报错的原因是，没有找到音符类型哼哼啊啊啊啊啊啊啊啊啊")
+            //};
+            instNote.thisNote = notesOnThisCanvas[i];
+            instNote.IsRefresh().Init(instNote.thisNote.hitTime, instNote.thisNote.positionX, this);
+            //NoteEdit instNote = Instantiate(note, Vector2.zero, Quaternion.identity, notesCanvas.transform).IsRefresh().Init(note.thisNote.hitTime, note.thisNote.positionX, this);
             noteEdits.Add(instNote);
         }
         ChartTools.EditNote2ChartDataNote(
