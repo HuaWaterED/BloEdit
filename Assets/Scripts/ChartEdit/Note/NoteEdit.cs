@@ -11,6 +11,9 @@ public class NoteEdit : Public_Button
     public RectTransform rectTransform;
     public bool isRefresh = false;
 
+    public List<Blophy.ChartEdit.Note> editing;
+    public Public_LineDiv public_LineDiv;
+
     public Image image;
     public override void OnStart()
     {
@@ -25,12 +28,12 @@ public class NoteEdit : Public_Button
         isRefresh = true;
         return this;
     }
-    public virtual NoteEdit Init(BeatLine beatLine, VLine vline, Public_LineDiv public_LineDiv)
+    public virtual NoteEdit Init(BeatLine beatLine, VLine vline, Public_LineDiv public_LineDiv, List<Blophy.ChartEdit.Note> editing)
     {
         BPMTime bpmTime = new() { integer = beatLine.thisBPM.integer, denominator = beatLine.thisBPM.denominator, molecule = beatLine.thisBPM.molecule };
-        return Init(bpmTime, vline.positionX, public_LineDiv);
+        return Init(bpmTime, vline.positionX, public_LineDiv, editing);
     }
-    public virtual NoteEdit Init(BPMTime bpmTime, float positionX, Public_LineDiv public_LineDiv)
+    public virtual NoteEdit Init(BPMTime bpmTime, float positionX, Public_LineDiv public_LineDiv, List<Blophy.ChartEdit.Note> editing)
     {
 
         if (isRefresh)
@@ -53,6 +56,8 @@ public class NoteEdit : Public_Button
             thisNote.hitTime = new(bpmTime.integer, bpmTime.molecule, bpmTime.denominator);
             thisNote.effect = Blophy.Chart.NoteEffect.Ripple | Blophy.Chart.NoteEffect.CommonEffect;
         }
+        this.editing = editing;
+        this.public_LineDiv = public_LineDiv;
         HoldLengthHandle();
         float canvasLocalPositionX = (public_LineDiv.vLines.edgeRightVerticalLine.transform.localPosition - public_LineDiv.vLines.edgeLeftVerticalLine.transform.localPosition).x / 2 * thisNote.positionX;
         float canvasLocalPositionY = YScale.Instance.GetPositionYWithSecondsTime(BPMManager.Instance.GetSecondsTimeWithBPMSeconds(thisNote.hitTime.thisStartBPM));

@@ -65,14 +65,15 @@ public class AddNote : ShortcutKeyEvent
                 }
             }
         }
+        List<Blophy.ChartEdit.Note> onlineNotes = Chart.Instance.chartEdit.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes;
+
         NoteEdit instNote = Instantiate(thisNote, Vector2.zero, Quaternion.identity, public_Linediv.notesCanvas.transform)
-            .Init(nearestBeatLine, nearestVerticalLine, public_Linediv);
+            .Init(nearestBeatLine, nearestVerticalLine, public_Linediv, onlineNotes);
         //nearestBeatLine.note.Add(instNote);
         int index_noteEdits = Algorithm.BinarySearch(public_Linediv.noteEdits, m => m.thisNote.hitTime.thisStartBPM < instNote.thisNote.hitTime.thisStartBPM, false);
         public_Linediv.noteEdits.Insert(index_noteEdits, instNote);
 
 
-        List<Blophy.ChartEdit.Note> onlineNotes = Chart.Instance.chartEdit.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes;
         int index_onlineNotes = Algorithm.BinarySearch(onlineNotes, m => m.hitTime.thisStartBPM < instNote.thisNote.hitTime.thisStartBPM, false);
         onlineNotes.Insert(index_onlineNotes, instNote.thisNote);
 

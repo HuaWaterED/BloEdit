@@ -14,6 +14,9 @@ public class EventEdit : Public_Button
     public EventVLine eventVLine;
     public Image image;
 
+
+    public List<Blophy.ChartEdit.Event> editing;
+    public Public_LineDiv public_LineDiv;
     public override void OnStart()
     {
         thisButton.onClick.AddListener(() =>
@@ -23,11 +26,11 @@ public class EventEdit : Public_Button
         });
     }
 
-    public EventEdit Init(BeatLine beatLine, VLine vline, Public_LineDiv public_LineDiv)
+    public EventEdit Init(BeatLine beatLine, VLine vline, Public_LineDiv public_LineDiv, List<Blophy.ChartEdit.Event> editing)
     {
         eventVLine = (EventVLine)vline;
         BPMTime bpmTime = new() { integer = beatLine.thisBPM.integer, denominator = beatLine.thisBPM.denominator, molecule = beatLine.thisBPM.molecule };
-        return Init(bpmTime, vline.positionX, public_LineDiv);
+        return Init(bpmTime, vline.positionX, public_LineDiv, editing);
     }
     public void RefreshThisEventsList() => eventVLine.AddEventEdit2ChartDataEvent(true);
     public EventEdit IsRefresh()
@@ -35,16 +38,16 @@ public class EventEdit : Public_Button
         isRefresh = true;
         return this;
     }
-    public EventEdit Init(BPMTime bpmTime, VLine vline, Public_LineDiv public_LineDiv)
+    public EventEdit Init(BPMTime bpmTime, VLine vline, Public_LineDiv public_LineDiv, List<Blophy.ChartEdit.Event> editing)
     {
         eventVLine = (EventVLine)vline;
-        return Init(bpmTime, vline.positionX, public_LineDiv);
+        return Init(bpmTime, vline.positionX, public_LineDiv, editing);
     }
-    public virtual EventEdit Init(BPMTime bpmTime, float positionX, Public_LineDiv public_LineDiv)
+    public virtual EventEdit Init(BPMTime bpmTime, float positionX, Public_LineDiv public_LineDiv, List<Blophy.ChartEdit.Event> editing)
     {
-        Blophy.ChartEdit.Event tempEvent = thisEvent;
+        //Blophy.ChartEdit.Event tempEvent = thisEvent;
 
-        thisEvent = new();
+        //thisEvent = new();
         if (isRefresh)
         {
             isRefresh = false;
@@ -52,12 +55,12 @@ public class EventEdit : Public_Button
             //thisNote.hitTime = tempNote.hitTime;
             //thisNote.effect = tempNote.effect;
             //thisNote.endTime = tempNote.endTime;
-            thisEvent.startTime = tempEvent.startTime;
-            thisEvent.endTime = tempEvent.endTime;
-            thisEvent.startValue = tempEvent.startValue;
-            thisEvent.endValue = tempEvent.endValue;
-            thisEvent.curve = tempEvent.curve;
-            thisEvent.isSelected = tempEvent.isSelected;
+            //thisEvent.startTime = tempEvent.startTime;
+            //thisEvent.endTime = tempEvent.endTime;
+            //thisEvent.startValue = tempEvent.startValue;
+            //thisEvent.endValue = tempEvent.endValue;
+            //thisEvent.curve = tempEvent.curve;
+            //thisEvent.isSelected = tempEvent.isSelected;
             if (thisEvent.isSelected)
             {
                 image.color = Color.white;
@@ -78,6 +81,9 @@ public class EventEdit : Public_Button
             thisEvent.curve = curve;
             HoldLengthHandle();
         }
+
+        this.editing = editing;
+        this.public_LineDiv = public_LineDiv;
         float canvasLocalPositionX = (public_LineDiv.vLines.edgeRightVerticalLine.transform.localPosition - public_LineDiv.vLines.edgeLeftVerticalLine.transform.localPosition).x / 2 * positionX;
         float canvasLocalPositionY = YScale.Instance.GetPositionYWithSecondsTime(BPMManager.Instance.GetSecondsTimeWithBPMSeconds(thisEvent.startTime.thisStartBPM));
         transform.localPosition = new Vector2(canvasLocalPositionX, canvasLocalPositionY);

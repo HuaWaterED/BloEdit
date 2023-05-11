@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Blophy.Chart
 {
@@ -40,6 +41,7 @@ namespace Blophy.Chart
         }
         public static Blophy.ChartEdit.Box CreateNewBoxEdit()
         {
+            Public_AnimationCurveEaseEnum.keyValuePairs.TryGetValue(0, out AnimationCurve result);
             Blophy.ChartEdit.Box box = new Blophy.ChartEdit.Box();
             box.lines = new() { new(), new(), new(), new(), new() };
             box.boxEvents = new();
@@ -52,11 +54,21 @@ namespace Blophy.Chart
             box.boxEvents.alpha = new();
             box.boxEvents.lineAlpha = new();
             box.boxEvents.rotate = new();
+            box.boxEvents.scaleX.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = 2.7f, endValue = 2.7f, curve = result });
+            box.boxEvents.scaleY.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = 2.7f, endValue = 2.7f, curve = result });
+            box.boxEvents.moveX.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = 0, endValue = 0, curve = result });
+            box.boxEvents.moveY.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = 0, endValue = 0, curve = result });
+            box.boxEvents.centerX.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = .5f, endValue = .5f, curve = result });
+            box.boxEvents.centerY.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = .5f, endValue = .5f, curve = result });
+            box.boxEvents.alpha.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = 0, endValue = 0, curve = result });
+            box.boxEvents.lineAlpha.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = 0, endValue = 0, curve = result });
+            box.boxEvents.rotate.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = 0, endValue = 0, curve = result });
             for (int i = 0; i < box.lines.Count; i++)
             {
                 box.lines[i].offlineNotes = new();
                 box.lines[i].onlineNotes = new();
                 box.lines[i].speed = new();
+                box.lines[i].speed.Add(new() { startTime = BPMTime.Zero, endTime = BPMTime.One, startValue = 3, endValue = 3, curve = result });
             }
             return box;
         }
@@ -149,6 +161,7 @@ namespace Blophy.Chart
     {
         public float offset = 0;
         public float musicLength = 0;
+        public float MusicLength => musicLength + offset;
         public List<BPM> BPMlist;
         public int tapCount = 0;
         public int holdCount = 0;
@@ -430,5 +443,6 @@ namespace Blophy.ChartEdit
             denominator = bpmTime.denominator;
         }
         public static BPMTime Zero => new();
+        public static BPMTime One => new(1, 0, 1);
     }
 }

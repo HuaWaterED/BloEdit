@@ -26,6 +26,8 @@ public class Edit_EventEdit : MonoBehaviour
     public TMP_InputField startValue;
     public TMP_InputField endValue;
     public TMP_Dropdown curveSelect;
+    public LineRenderer curve;
+    public Camera lineRendererCamera;
     private void Start()
     {
         startTime.onValueChanged.AddListener((value) =>
@@ -75,24 +77,35 @@ public class Edit_EventEdit : MonoBehaviour
                 //    Chart.Instance.Refresh();
             }
         });
-        //endValue.onEndEdit.AddListener((value) =>
-        //{
-        //    if (eventEdit.eventVLine.eventType == EventType.speed)
-        //    {
-        //        Debug.Log("endValueOnEndEdit");
-        //        eventEdit.thisEvent.endValue = float.Parse(value);
-        //        Chart.Instance.Refresh();
-        //    }
-        //});
-        //startValue.onEndEdit.AddListener((value) =>
-        //{
-        //    if (eventEdit.eventVLine.eventType == EventType.speed)
-        //    {
-        //        Debug.Log("startValueOnEndEdit");
-        //        eventEdit.thisEvent.startValue = float.Parse(value);
-        //        Chart.Instance.Refresh();
-        //    }
-        //});
+        curveSelect.onValueChanged.AddListener((value) =>
+        {
+            if (value > 30 || value < 0)
+            {
+
+            }
+            else
+            {
+                Public_AnimationCurveEaseEnum.keyValuePairs.TryGetValue(value, out AnimationCurve resultCurve);
+                EventEdit.thisEvent.curve = resultCurve;
+                EventEdit.eventVLine.AddEventEdit2ChartDataEvent(true);
+            }
+        });
+    }
+    public void ResetAllValue()
+    {
+        startTime.SetTextWithoutNotify(string.Empty);
+        endTime.SetTextWithoutNotify(string.Empty);
+        startValue.SetTextWithoutNotify(string.Empty);
+        endValue.SetTextWithoutNotify(string.Empty);
+        curveSelect.SetValueWithoutNotify(0);
+        Public_AnimationCurveEaseEnum.keyValuePairs.TryGetValue(0, out AnimationCurve resultCurve);
+        for (int i = 0; i < curve.positionCount; i++)
+        {
+            float x = i / (float)curve.positionCount;
+            float y = resultCurve.Evaluate(x);
+            curve.endWidth = curve.startWidth = .05f;
+            curve.SetPosition(i, (Vector2)lineRendererCamera.ViewportToWorldPoint((new Vector2(x, y) * .5f) + Vector2.one * .25f));
+        }
     }
     public void InitThisEventEdit(EventEdit eventEdit, bool changeSelectStateYesOrNo)
     {
@@ -125,5 +138,13 @@ public class Edit_EventEdit : MonoBehaviour
         endValue.SetTextWithoutNotify($"{eventEdit.thisEvent.endValue}");
         //endValue.text = $"{eventEdit.thisEvent.endValue}";
 
+
+        for (int i = 0; i < curve.positionCount; i++)
+        {
+            float x = i / (float)curve.positionCount;
+            float y = eventEdit.thisEvent.curve.Evaluate(x);
+            curve.endWidth = curve.startWidth = .05f;
+            curve.SetPosition(i, (Vector2)lineRendererCamera.ViewportToWorldPoint((new Vector2(x, y) * .5f) + Vector2.one * .25f));
+        }
     }
 }

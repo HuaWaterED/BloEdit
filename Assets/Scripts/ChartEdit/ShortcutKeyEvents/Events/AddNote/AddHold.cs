@@ -32,8 +32,9 @@ public class AddHold : AddNote
             //第一次
             GetNearestBeatLineAndVerticalLine(
             out BeatLine firstBeatLine, out VLine firstVLine, out findedPublic_LineDiv);
+            List<Blophy.ChartEdit.Note> onlineNotes = Chart.Instance.chartEdit.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[int.Parse(LineNumber.Instance.thisText.text) - 1].onlineNotes;
             instNote = Instantiate(thisNote, Vector2.zero, Quaternion.identity, findedPublic_LineDiv.notesCanvas.transform)
-           .Init(firstBeatLine, firstVLine, findedPublic_LineDiv);
+           .Init(firstBeatLine, firstVLine, findedPublic_LineDiv, onlineNotes);
             StartCoroutine(WaitForPressureAgain(firstBeatLine, instNote));
 
         }
@@ -56,20 +57,32 @@ public class AddHold : AddNote
             }
             //TODO
             GetNearestBeatLineAndVerticalLine(out BeatLine againBeatLine, out VLine againVLine, out Public_LineDiv againPublic_LineDiv);
-            BPMData = againBeatLine.thisBPM;
-            float endSeconds = BPMManager.Instance.GetSecondsTimeWithBPMSeconds(BPMData.thisStartBPM);
-            float startSeconds = BPMManager.Instance.GetSecondsTimeWithBPMSeconds(firstBeatLine.thisBPM.thisStartBPM);
-            float delta_Canvas = YScale.Instance.GetPositionYWithSecondsTime(endSeconds)
-                - YScale.Instance.GetPositionYWithSecondsTime(startSeconds);
-            noteEdit.rectTransform.sizeDelta = new(noteEdit.rectTransform.sizeDelta.x, delta_Canvas);
+            try
+            {
+                BPMData = againBeatLine.thisBPM;
+                float endSeconds = BPMManager.Instance.GetSecondsTimeWithBPMSeconds(BPMData.thisStartBPM);
+                float startSeconds = BPMManager.Instance.GetSecondsTimeWithBPMSeconds(firstBeatLine.thisBPM.thisStartBPM);
+                float delta_Canvas = YScale.Instance.GetPositionYWithSecondsTime(endSeconds)
+                    - YScale.Instance.GetPositionYWithSecondsTime(startSeconds);
+                noteEdit.rectTransform.sizeDelta = new(noteEdit.rectTransform.sizeDelta.x, delta_Canvas);
+            }
+            catch { }
             //
             yield return new WaitForEndOfFrame();
         }
         waitForPressureAgain = false;
         noteEdit.thisNote.endTime = new(BPMData.integer, BPMData.molecule, BPMData.denominator);
 
-        EventsEdit_Edit.Instance.UpdateEditingInfo(noteEdit, true);
-        AddNoteEdit2Chart();
+        if (noteEdit.thisNote.endTime.thisStartBPM - noteEdit.thisNote.hitTime.thisStartBPM <= .0001f)
+        {
+            Debug.LogError("哒咩哒咩，长度为0的Hold！");
+            Destroy(noteEdit.gameObject);
+        }
+        else
+        {
+            EventsEdit_Edit.Instance.UpdateEditingInfo(noteEdit, true);
+            AddNoteEdit2Chart();
+        }
     }
 
     private void AddNoteEdit2Chart()

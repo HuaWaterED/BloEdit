@@ -8,8 +8,9 @@ public class BoxManager : MonoBehaviourSingleton<BoxManager>
     private void Start()
     {
         RefreshList();
-        StateManager.Instance.IsStart = true;
-        StateManager.Instance.IsPause = true;
+        AssetManager.Instance.box.gameObject.SetActive(true);//激活所有方框
+        //StateManager.Instance.IsStart = true;
+        //StateManager.Instance.IsPause = true;
     }
     public void RefreshList()
     {

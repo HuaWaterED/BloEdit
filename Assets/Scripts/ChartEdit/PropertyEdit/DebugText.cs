@@ -9,7 +9,7 @@ public class DebugText : MonoBehaviourSingleton<DebugText>
     private void Update()
     {
         thisText.text =
-            $"Total/CurrentTime: {Chart.Instance.chartData.globalData.musicLength}/{ProgressManager.Instance.CurrentTime}\n" +
+            $"Total/CurrentTime: {Chart.Instance.chartData.globalData.MusicLength}/{ProgressManager.Instance.CurrentTime}\n" +
             $"CurrentFPS: {1 / GetSmoothDeltaTime():F2}\n" +
             $"CurrentPositionY：{YScale.Instance.GetPositionYWithSecondsTime((float)ProgressManager.Instance.CurrentTime)}\n" +
             $"ArisePositionY：{YScale.Instance.GetPositionYWithSecondsTime((float)(ProgressManager.Instance.CurrentTime + 10))}\n" +

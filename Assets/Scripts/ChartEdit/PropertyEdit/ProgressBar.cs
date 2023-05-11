@@ -11,7 +11,7 @@ public class ProgressBar : MonoBehaviourSingleton<ProgressBar>
         progressBar = GetComponent<Scrollbar>();
         progressBar.onValueChanged.AddListener((theValue) =>
         {
-            float result = Chart.Instance.chartData.globalData.musicLength * theValue;
+            float result = Chart.Instance.chartData.globalData.MusicLength * theValue;
             ProgressManager.Instance.SetTime(result);
             //for (int i = 0; i < ChartPreviewEdit.Instance.lines.Count; i++)
             //{
@@ -19,10 +19,11 @@ public class ProgressBar : MonoBehaviourSingleton<ProgressBar>
             //}
             Chart.Instance.Refresh();
         });
+        //progressBar.value = -.2f;
     }
     private void Update()
     {
-        float currentProgress = (float)ProgressManager.Instance.CurrentTime / Chart.Instance.chartData.globalData.musicLength;
+        float currentProgress = (float)ProgressManager.Instance.CurrentTime / Chart.Instance.chartData.globalData.MusicLength;
         progressBar.SetValueWithoutNotify(currentProgress);
         if (currentProgress >= .9999f)
         {

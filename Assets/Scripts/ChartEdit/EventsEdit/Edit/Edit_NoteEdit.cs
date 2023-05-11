@@ -102,7 +102,17 @@ public class Edit_NoteEdit : MonoBehaviour
             Chart.Instance.Refresh(true);
         });
     }
-
+    public void ResetAllValue()
+    {
+        noteType.SetValueWithoutNotify(0);
+        noteEffect.SetIsOnWithoutNotify(false);
+        noteRipple.SetIsOnWithoutNotify(false);
+        hitTime.SetTextWithoutNotify(string.Empty);
+        endTime.SetTextWithoutNotify(string.Empty);
+        positionX.SetTextWithoutNotify(string.Empty);
+        isClockwise.SetIsOnWithoutNotify(false);
+        noteEdit = null;
+    }
     public void InitThisNoteEdit(NoteEdit noteEdit, bool changeSelectStateYesOrNo)
     {
         //this.noteEdit = noteEdit;

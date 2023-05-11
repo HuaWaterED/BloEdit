@@ -8,6 +8,7 @@ public class EventVLine : VLine
 {
     public EventType eventType;
     public List<EventEdit> eventsEditList;
+    public List<Blophy.ChartEdit.Event> events;
     public EventVLine ChangeEventEdit(EventEdit eventEdit)
     {
         EventEdit findedEventEdit = eventsEditList.Find((m) => m == eventEdit);
@@ -56,6 +57,13 @@ public class EventVLine : VLine
             }
             return 0;
         });
+        if (instEvent != null)
+        {
+
+            int indexInList = eventsEditList.IndexOf(instEvent);
+            if (indexInList - 1 >= 0)
+                eventsEditList[indexInList].thisEvent.startValue = eventsEditList[indexInList - 1].thisEvent.endValue;
+        }
         //如果是
         switch (eventType)
         {
@@ -138,16 +146,24 @@ public class EventVLine : VLine
                 defaultStartTime = events[i].endTime;
                 speedEventVoidFill.Add(events[i]);
             }
-            if (speedEventVoidFill[^1].endTime < Chart.Instance.chartData.globalData.musicLength)
+            if (events.Count != 0)
             {
-                Blophy.Chart.Event speedEvent = new();
-                speedEvent.startTime = defaultStartTime;
-                speedEvent.endTime = Chart.Instance.chartData.globalData.musicLength;
-                speedEvent.startValue = defaultValue;
-                speedEvent.endValue = defaultValue;
-                Public_AnimationCurveEaseEnum.keyValuePairs.TryGetValue(0, out AnimationCurve anim);
-                speedEvent.curve = anim;
-                speedEventVoidFill.Add(speedEvent);
+                if (speedEventVoidFill[^1].endTime < Chart.Instance.chartData.globalData.MusicLength)
+                {
+                    Blophy.Chart.Event speedEvent = new();
+                    speedEvent.startTime = defaultStartTime;
+                    speedEvent.endTime = Chart.Instance.chartData.globalData.MusicLength;
+                    speedEvent.startValue = defaultValue;
+                    speedEvent.endValue = defaultValue;
+                    Public_AnimationCurveEaseEnum.keyValuePairs.TryGetValue(0, out AnimationCurve anim);
+                    speedEvent.curve = anim;
+                    speedEventVoidFill.Add(speedEvent);
+                }
+            }
+            else
+            {
+                Public_AnimationCurveEaseEnum.keyValuePairs.TryGetValue(0, out AnimationCurve result);
+                speedEventVoidFill.Add(new() { startTime = 0, endTime = 200, startValue = 2, endValue = 2, curve = result });
             }
             events = speedEventVoidFill;
             Chart.Instance.chartData.boxes[int.Parse(BoxNumber.Instance.thisText.text) - 1].lines[1].Speed
@@ -161,10 +177,10 @@ public class EventVLine : VLine
             {
                 ChartTools.SpeedEvents2Far(currentBox.lines[i]);
             }
-            if (refreshYesOrNo)
-            {
-                Chart.Instance.Refresh();
-            }
+        }
+        if (refreshYesOrNo)
+        {
+            Chart.Instance.Refresh();
         }
     }
     private void UpdateEvents(List<Blophy.ChartEdit.Event> events)
@@ -175,5 +191,6 @@ public class EventVLine : VLine
             /*Chart.Instance.boxesEdit[int.Parse(BoxNumber.Instance.thisText.text) - 1].boxEvents.centerX*/
             events.Add(eventsEditList[i].thisEvent);
         }
+        this.events = events;
     }
 }

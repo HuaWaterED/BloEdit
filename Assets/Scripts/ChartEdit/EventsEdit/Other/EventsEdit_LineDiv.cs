@@ -61,7 +61,7 @@ public class EventsEdit_LineDiv : Public_LineDiv
             EventEdit instEventEdit = Instantiate(eventEditPrefab, notesCanvas.transform);
             instEventEdit.thisEvent = currentEvent;
             instEventEdit.IsRefresh();
-            instEventEdit.Init(currentEvent.startTime, eventVLine, this);
+            instEventEdit.Init(currentEvent.startTime, eventVLine, this, events);
             eventVLine.eventsEditList.Add(instEventEdit);
 
             if (currentEvent.isSelected)

@@ -54,6 +54,7 @@ public class ShortcutKeyManager : MonoBehaviourSingleton<ShortcutKeyManager>
                     break;
                 }
             }
+            if (@event == null) continue;
             ShortcutKey instShortcutKey =
                 Instantiate(shortcutKey, transform)
                 .Init(shortcutKeyMap[i].keyCode, shortcutKeyMap[i].keyCode2, shortcutKeyMap[i].isDoublePress, @event.ExeDown, @event.Exe, @event.ExeUp);

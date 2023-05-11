@@ -34,6 +34,10 @@ public class VerticalLine : MonoBehaviourSingleton<VerticalLine>
         {
             eventVLines[i].AddLineOrRemoveLine(0, thisText.text);
         }
+        for (int i = 0; i < vLines.Count; i++)
+        {
+            vLines[i].AddLineOrRemoveLine(0, thisText.text);
+        }
     }
 
 }

@@ -201,18 +201,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineDistance: 0
-  canvasSpeed:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  canvasLocalOffset:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   onlineNote: {fileID: 9204814098932795526}
   offlineNote: {fileID: 8414123189369247029}
   onlineNotes: []
@@ -392,18 +380,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineDistance: 0
-  canvasSpeed:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  canvasLocalOffset:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   onlineNote: {fileID: 4538639845524256100}
   offlineNote: {fileID: 6617246351048337357}
   onlineNotes: []
@@ -499,18 +475,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineDistance: 0
-  canvasSpeed:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  canvasLocalOffset:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   onlineNote: {fileID: 3710686024088124923}
   offlineNote: {fileID: 1862021682680572520}
   onlineNotes: []
@@ -836,18 +800,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineDistance: 0
-  canvasSpeed:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  canvasLocalOffset:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   onlineNote: {fileID: 9094191168402356496}
   offlineNote: {fileID: 8456826913762907855}
   onlineNotes: []
@@ -1318,18 +1270,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineDistance: 0
-  canvasSpeed:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  canvasLocalOffset:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   onlineNote: {fileID: 7023855818779590189}
   offlineNote: {fileID: 4649643865117320511}
   onlineNotes: []
@@ -1582,9 +1522,9 @@ MonoBehaviour:
   currentMoveY: 0
   currentRotate: 0
   boxFineness: 0
-  default_currentScaleX: 2.25
-  default_currentScaleY: 2.25
-  default_currentAlpha: 1
+  default_currentScaleX: 2.7
+  default_currentScaleY: 2.7
+  default_currentAlpha: 0
   default_currentCenterX: 0.5
   default_currentCenterY: 0.5
   default_currentLineAlpha: 0

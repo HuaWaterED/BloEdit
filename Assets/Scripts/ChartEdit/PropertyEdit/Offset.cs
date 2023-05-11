@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class Offset : MonoBehaviour
+public class Offset : MonoBehaviourSingleton<Offset>
 {
-    // Start is called before the first frame update
-    void Start()
+    public TMP_InputField thisInputField;
+    private void Start()
     {
-        
-    }
+        thisInputField.SetTextWithoutNotify($"{(int)(Chart.Instance.chartData.globalData.offset * 1000)}");
+        thisInputField.onValueChanged.AddListener((value) =>
+        {
+            if (float.TryParse(value, out float result))
+            {
+                Chart.Instance.chartData.globalData.offset = result / 1000;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+                ProgressManager.Instance.OffsetTime(0);
+            }
+        });
     }
 }

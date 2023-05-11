@@ -4,14 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class ProgressManager : MonoBehaviourSingleton<ProgressManager>
 {
-    Stopwatch musicPlayerTime = new();//计时器，谱面时间和音乐时间的
-    double dsp_StartPlayMusic;//开始时间
-    double dsp_LastPlayMusic;//上一次暂停后的时间
-    double offset = 0;//偏移
-    double skipTime = 0;//时间跳转
+    public Stopwatch musicPlayerTime = new();//计时器，谱面时间和音乐时间的
+    public double dsp_StartPlayMusic;//开始时间
+    public double dsp_LastPlayMusic;//上一次暂停后的时间
+    public double Offset => Chart.Instance.chartData.globalData.offset;//偏移
+    public double skipTime = 0;//时间跳转
 
     public float playSpeed = 1;
     public double CurrentTime => musicPlayerTime.ElapsedMilliseconds * playSpeed / 1000d + skipTime;//当前时间
@@ -25,10 +26,9 @@ public class ProgressManager : MonoBehaviourSingleton<ProgressManager>
     /// 开始播放
     /// </summary>
     /// <param name="offset">偏移</param>
-    public void StartPlay(double offset = 0)
+    public void StartPlay()
     {
-        this.offset = offset;//偏移
-        dsp_StartPlayMusic = AudioSettings.dspTime + this.offset;//获取到开始播放的时间
+        dsp_StartPlayMusic = AudioSettings.dspTime + Offset;//获取到开始播放的时间
         dsp_LastPlayMusic = dsp_StartPlayMusic;//同步LastPlayMusic
         AssetManager.Instance.musicPlayer.PlayScheduled(dsp_StartPlayMusic);//在绝对的时间线上播放
         musicPlayerTime.Start();//开始计时
@@ -38,7 +38,7 @@ public class ProgressManager : MonoBehaviourSingleton<ProgressManager>
     /// </summary>
     public void PausePlay()
     {
-        dsp_LastPlayMusic = AudioSettings.dspTime + offset;//更新暂停时候的时间
+        dsp_LastPlayMusic = AudioSettings.dspTime + Offset;//更新暂停时候的时间
         StopMusic();//暂停播放音乐
     }
     /// <summary>
@@ -55,8 +55,9 @@ public class ProgressManager : MonoBehaviourSingleton<ProgressManager>
     /// </summary>
     void StopMusic()
     {
-        musicPlayerTime.Stop();
+        Debug.Log("ExeStop");
         AssetManager.Instance.musicPlayer.Pause();
+        musicPlayerTime.Stop();
     }
     /// <summary>
     /// 跳转时间
@@ -74,7 +75,16 @@ public class ProgressManager : MonoBehaviourSingleton<ProgressManager>
     public void OffsetTime(double time)
     {
         skipTime += time;
-        AssetManager.Instance.musicPlayer.time = (float)CurrentTime;
+
+        float currentMusicPlayerTime = (float)(CurrentTime - Offset);
+        if (currentMusicPlayerTime >= 0)
+            AssetManager.Instance.musicPlayer.time = currentMusicPlayerTime;
+        else
+        {
+            //AssetManager.Instance.musicPlayer.Pause();
+            AssetManager.Instance.musicPlayer.SetScheduledStartTime(AudioSettings.dspTime - currentMusicPlayerTime);
+            AssetManager.Instance.musicPlayer.time = 0;
+        }
         ResetAllLineNoteState();
     }
     /// <summary>
@@ -82,9 +92,12 @@ public class ProgressManager : MonoBehaviourSingleton<ProgressManager>
     /// </summary>
     public void ResetTime()
     {
+        Debug.Log("ExeResetTime");
         skipTime = 0;
         musicPlayerTime.Reset();
-        AssetManager.Instance.musicPlayer.time = (float)CurrentTime;
+        //AssetManager.Instance.musicPlayer.time = (float)CurrentTime;
+        AssetManager.Instance.musicPlayer.time = 0;
+
     }
     /// <summary>
     /// 让时间重新开始计算

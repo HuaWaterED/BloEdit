@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class FlickEdit : NoteEdit
 {
-    public override NoteEdit Init(BeatLine beatLine, VLine vline, Public_LineDiv public_LineDiv)
+    public override NoteEdit Init(BeatLine beatLine, VLine vline, Public_LineDiv public_LineDiv, List<Blophy.ChartEdit.Note> editing)
     {
-        base.Init(beatLine, vline, public_LineDiv);
+        base.Init(beatLine, vline, public_LineDiv, editing);
         thisNote.noteType = Blophy.Chart.NoteType.Flick;
         EventsEdit_Edit.Instance.UpdateEditingInfo(this, true);
         return this;

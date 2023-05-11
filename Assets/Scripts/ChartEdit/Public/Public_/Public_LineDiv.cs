@@ -71,7 +71,7 @@ public class Public_LineDiv : MonoBehaviour
             //    _ => throw new System.Exception("哼哼啊啊啊啊啊啊啊啊啊1145141919810，你知道为什么报错嘛？哼哼啊啊啊啊啊啊啊啊啊，报错的原因是，没有找到音符类型哼哼啊啊啊啊啊啊啊啊啊")
             //};
             instNote.thisNote = notesOnThisCanvas[i];
-            instNote.IsRefresh().Init(instNote.thisNote.hitTime, instNote.thisNote.positionX, this);
+            instNote.IsRefresh().Init(instNote.thisNote.hitTime, instNote.thisNote.positionX, this, notesOnThisCanvas);
             //NoteEdit instNote = Instantiate(note, Vector2.zero, Quaternion.identity, notesCanvas.transform).IsRefresh().Init(note.thisNote.hitTime, note.thisNote.positionX, this);
             noteEdits.Add(instNote);
         }
